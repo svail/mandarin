@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="generator" content="Madoko, version 1.0.0-rc2" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <meta name="author" content="Tony Han" />
+  <title>Around the World in 60 Days:  Getting Deep Speech to Work on Mandarin</title>
+  <style type="text/css"  class="link">
+  /*# sourceURL=madoko.css */
+  .btn {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 15px;
+      background: #575757;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+  }
+
+  .btn:hover {
+      background: #ff0000;
+      text-decoration: none;
+  }
+
+  .madoko .toc>.tocblock .tocblock .tocblock {
+    margin-left: 2.25em;
+  }
+  .madoko .toc>.tocblock .tocblock {
+    margin-left: 1.5em;
+  }
+  .madoko .toc-contents>.tocblock>.tocitem {
+    font-weight: bold;
+  }
+  .madoko .toc {
+    margin-top: 1em;
+  }
+  .madoko p.para-continue {
+    margin-bottom: 0pt;
+  }
+  .madoko .para-block+p {
+    margin-top: 0pt;
+  }
+  .madoko ul.para-block, .madoko ol.para-block {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+  }
+  .madoko ul.para-end, .madoko ol.para-end {
+    margin-bottom: 1em;
+  }
+  .madoko dl {
+    margin-left: 0em;
+  }
+  .madoko blockquote {
+    font-style: italic;
+  }
+  .madoko a.localref {
+    text-decoration: none;
+  }
+  .madoko a.localref:hover {
+    text-decoration: underline;
+  }
+  .madoko .footnotes {
+    font-size: smaller;
+    margin-top: 2em;
+  }
+  .madoko .footnotes hr {
+    width: 50%;
+    text-align: left;
+  }
+  .madoko .footnote { 
+    margin-left: 1em;
+  }
+  .madoko .footnote-before {
+    margin-left: -1em;
+    width: 1em;
+    display: inline-block;
+  }
+  .madoko .align-center, .madoko .align-center>p {
+    text-align: center !important;
+  }
+  .madoko .align-center pre {
+    text-align: left;
+  }
+  .madoko .align-center>* {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-left, .madoko .align-left>p {
+    text-align: left !important;
+  }
+  .madoko .align-left>* {
+    margin-left: 0pt !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-right, .madoko .align-right>p {
+    text-align: right !important;
+  }
+  .madoko .align-right>* {
+    margin-left: auto !important;
+    margin-right: 0pt !important;
+  }
+  .madoko .align-center>table,
+  .madoko .align-left>table,
+  .madoko .align-right>table {
+    text-align: left !important;
+  }
+  .madoko .equation-before {
+    float: right;
+  }
+  .madoko .bibitem {
+    font-size: smaller;
+  }
+  .madoko .bibsearch {
+    font-size: x-small;
+    text-decoration:none;
+    color: black;
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  .madoko .block, .madoko .figure, .madoko .bibitem, .madoko .equation, .madoko div.math {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .figure {
+    padding: 0.5em;
+    margin-left: 0pt;
+    margin-right: 0pt;
+  }
+  .madoko .hidden {
+    display: none;
+  }
+  .madoko .invisible {
+    visibility: hidden;
+  }
+  .madoko.preview .invisible {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  .madoko code.code, .madoko span.code {
+    white-space: pre-wrap;
+  }
+  .madoko hr, hr.madoko {
+    border: none;
+    border-bottom: black solid 1px;
+    margin-bottom: 0.5ex;
+  }
+  .madoko .framed>*:first-child {
+    margin-top: 0pt;
+  }
+  .madoko .framed>*:last-child {
+    margin-bottom: 0pt;
+  }
+  .madoko ul.list-style-type-dash {
+      list-style-type: none !important;
+  }
+  .madoko ul.list-style-type-dash > li:before {
+      content: "\2013"; 
+      position: absolute;
+      margin-left: -1em; 
+  }
+  .madoko table.madoko {
+    border-collapse: collapse;
+  }
+  .madoko td, .madoko th {
+    padding: 0ex 0.5ex;
+    margin: 0pt;
+    vertical-align: top;
+  }
+  .madoko .cell-border-left {
+    border-left: 1px solid black;
+  }
+  .madoko .cell-border-right {
+    border-right: 1px solid black;
+  }
+  .madoko thead>tr:first-child>.cell-line,
+  .madoko tbody:first-child>tr:first-child>.cell-line {
+    border-top: 1px solid black;
+    border-bottom: none;
+  }
+  .madoko .cell-line, .madoko .cell-double-line {
+    border-bottom: 1px solid black;
+    border-top: none;
+  }
+  .madoko .cell-double-line {
+    border-top: 1px solid black;
+    padding-top: 1.5px !important;
+  }
+  .madoko .input-mathpre .MathJax_Display {
+    text-align: left !important;
+  }
+  .madoko div.input-mathpre {
+    text-align: left;
+    margin-top: 1.5ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .math-rendering {
+    color: gray;
+  }
+  .madoko .mathdisplay {
+    text-align: center;
+  }
+  .madoko .pretty table {
+    border-collapse: collapse;
+  }
+  .madoko .pretty td {
+    padding: 0em;
+  }
+  .madoko .pretty td.empty {
+    min-width: 1.5ex;
+  }
+  .madoko .pretty td.expander {
+    width: 100em;
+  }
+  body.madoko, .madoko .serif {
+    font-family: Cambria,"Times New Roman","Liberation Serif","Times",serif;
+  }
+  .madoko .sans-serif {
+    font-family: "Calibri", "Optima", sans-serif;
+  }
+  .madoko .symbol {
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  body.madoko {  
+    -webkit-text-size-adjust: 100%;       
+    text-rendering: optimizeLegibility;
+  }
+  body.madoko {
+    max-width: 88ex; 
+    margin: 1em auto;
+    padding: 0em 2em;  
+  }
+  body.preview.madoko {
+    padding: 0em 1em;
+  }
+  .madoko p {
+    text-align: justify;
+  }
+  .madoko h1, .madoko h2, .madoko h3, .madoko h4 { 
+    margin-top: 1.22em; 
+    margin-bottom: 1ex;
+  }
+  .madoko h1+p, .madoko h2+p, .madoko h3+p, .madoko h4+p, .madoko h5+p  { 
+    margin-top: 1ex;    
+  }
+  .madoko h5, .madoko h6 { 
+    margin-top: 1ex;
+    font-size: 1em;
+  }
+  .madoko h5 { 
+    margin-bottom: 0.5ex;
+  }
+  .madoko h5 + p {
+    margin-top: 0.5ex;
+  }
+  .madoko h6 { 
+    margin-bottom: 0pt;
+  }
+  .madoko h6 + p {
+    margin-top: 0pt;
+  }
+  .madoko pre, .madoko code, .madoko kbd, .madoko samp, .madoko tt, 
+  .madoko .monospace, .madoko .token-indent, .madoko .reveal pre, .madoko .reveal code, .madoko .email {
+    font-family: Consolas,"Andale Mono WT","Andale Mono",Lucida Console,Monaco,monospace,monospace;
+    font-size: 0.85em;
+  }
+  .madoko pre code, .madoko .token-indent {
+    font-size: 0.95em;
+  }
+  .madoko pre code {
+    font-family: inherit !important;
+  }
+  .madoko ol.linenums li {
+    background-color: white;
+    list-style-type: decimal;
+  }
+  .madoko .remote {
+    background-color: #F0FFF0;
+  }
+  .madoko .remote + * {
+    margin-top: 0pt;
+  }
+  @media print {
+    body.madoko {
+      font-size: 10pt;
+    }
+    @page {
+      margin: 1in 1.5in;
+    }
+  }
+  @media only screen and (max-device-width:1024px) {
+    body.madoko {
+      padding: 0em 0.5em;    
+    }
+    .madoko li {
+      text-align: left;
+    }
+  }
+  
+    </style>
+  
+  </head>
+<body class="madoko">
+
+<div class="body madoko" style="line-adjust:0">
+
+<div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
+<div class="titleheader align-center" style="text-align:center;line-adjust:0">
+<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Around the World in 60 Days:  Getting Deep Speech to Work on Mandarin</div>
+<div class="titlenote para-block" style="line-adjust:0">January 2016</div></div>
+<div class="authors align-center" style="text-align:center;width:80%;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
+<tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
+<div class="authorname" style="font-size:large;line-adjust:0">Ryan J. Prenger</div>
+<div class="authoraddress" style="line-adjust:0">Baidu</div>
+<div class="authoremail email" style="line-adjust:0">ryanprenger@baidu.com</div></td><td class="author column" style="text-align:center;line-adjust:0">
+<div class="authorname" style="font-size:large;line-adjust:0">Tony Han</div>
+<div class="authoraddress" style="line-adjust:0">Baidu</div>
+<div class="authoremail email" style="line-adjust:0">tonyhan@baidu.com</div></td></tr></tbody></table></div></div><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2>
+<p class="p noindent">At SVAIL, our mission is to create AI technology that lets us have a significant impact on hundreds of millions of people. When we did the original Deep Speech work&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#hannun2014deepspeech" title="A.&#160;Hannun, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, G.&#160;Diamos, E.&#160;Elsen, R.&#160;Prenger, S.&#160;Satheesh, S.&#160;Sengupta, A.&#160;Coates, et&#160;al. 
+Deepspeech: Scaling up end-to-end speech recognition. 
+arXiv preprint arXiv:1412.5567, 2014." class="bibref localref" style="target-element:bibitem"><span class="cite-number">6</span></a>]</span> in English, it became clear that the shortest path to achieving our mission would be to get the system working in Mandarin Chinese.  In our recent paper&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>, we showed our results in Mandarin. In just a few months, we had produced a Mandarin speech recognition system with a recognition rate better than native Mandarin speakers. The biggest change we had to make for our Deep Speech system to work in Mandarin was increasing the size of our output layer to accommodate the larger number of Chinese characters (see figure &nbsp;<a href="#fig-rnn_structs" title="Architecture of the DS2 system used on English versus Mandarin.  The only change is the larger output layer in Mandarin that accommodates the &#160;6000 Mandarin characters, as opposed to the 26 we use in English." class="localref" style="target-element:figure"><span class="figure-label">1</span></a>). Here we want to discuss what we did to adapt the system to Mandarin and how the end-to-end learning approach made the whole project easier.
+</p>
+<figure id="fig-rnn_structs" class="figure floating align-center float" style="text-align:center;float-env:figure;float-name:Figure">
+<div class="center align-center" style="text-align:center">
+<p class="p noindent"><img src="resources/blog_fig.png" title="blog_fig" alt="blog_fig" data-path="images/blog_fig.png" data-linkid="blog_fig" style="width:100%">
+</p></div>
+<hr  class="figureline madoko" style="display:block">
+
+<div class="p noindent"><fig-caption class="figure-caption"><span class="caption-before"><strong class="strong-star2">Figure&#160;<span class="figure-label">1</span>.</strong> </span><span class="caption-text">Architecture of the DS2 system used on English versus Mandarin.  The only change is the larger output layer in Mandarin that accommodates the &#160;6000 Mandarin characters, as opposed to the 29 we use in English.</span></fig-caption></div></figure><h2 id="sec-how-end-to-end-learning-made-switching-to-mandarin-easier" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">2</span>.&#8194;</span>How End-To-End Learning Made Switching to Mandarin Easier</h2>
+<p class="p noindent">Chinese is considered one of the hardest widely spoken languages for English speakers to learn for several reasons&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#jackson2001lessons" title="F.&#160;H. Jackson and M.&#160;A. Kaplan. 
+Lessons learned from fifty years of theory and practice in government language teaching. 
+GEORGETOWN UNIVERSITY ROUND TABLE ON LANGUAGES AND LINGUISTICS 1999, page&#160;71, 2001." class="bibref localref" style="target-element:bibitem"><span class="cite-number">7</span></a>]</span>. First, unlike English, Mandarin is a tonal language.  This means that changes in pitch actually convey different words, rather than just intentions as in English.  Secondly, the language has more than 20,000 different characters, around 6,000 of which are commonly used&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#norman1988chinese" title="J.&#160;Norman. 
+Chinese." class="bibref localref" style="target-element:bibitem"><span class="cite-number">10</span></a>]</span>.  Thirdly, the writing system doesn’t use spaces to delimit different words.
+</p>
+<p class="p indent">Traditional speech recognition systems have many components that are necessary to achieve good accuracy with small training data sets.  But the complexity of these systems exacerbates the challenges of adapting a speech recognition system to Mandarin. The end-to-end approach used in Deep Speech allowed us to achieve state-of-the-art results quickly with a minimal amount of effort geared towards domain specific adaptation.  Below we cover how our end-to-end approach helped us deal with these problems.
+</p><h3 id="sec-input-features" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.1</span>.&#8194;</span>Input Features</h3>
+<p class="p noindent">Traditional speech recognition systems first convert the raw audio signal into audio features such as mel-frequency cepstral coefficients (MFCCs) in order to preserve and amplify the speech related information in the audio signal while reducing the input dimension&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#davis1980comparison" title="S.&#160;B. Davis and P.&#160;Mermelstein. 
+Comparison of parametric representations for monosyllabic word recognition in continuously spoken sentences. 
+Acoustics, Speech and Signal Processing, IEEE Transactions on, 28(4):357&#8211;366, 1980." class="bibref localref" style="target-element:bibitem"><span class="cite-number">3</span></a>]</span>.  These features suppress some of the pitch information that is unimportant for recognizing words in English but essential for tonal speech recognition.  Researchers adapting the system to a tonal language like Mandarin may need to add new features containing pitch information to get good performance&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#lamel2011improved" title="L.&#160;Lamel, J.-L. Gauvain, V.&#160;B. Le, I.&#160;Oparin, and S.&#160;Meng. 
+Improved models for mandarin speech-to-text transcription." class="bibref localref" style="target-element:bibitem"><span class="cite-number">9</span></a>, <a href="#shan2010search" title="J.&#160;Shan, G.&#160;Wu, Z.&#160;Hu, X.&#160;Tang, M.&#160;Jansche, and P.&#160;J. Moreno. 
+Search by voice in mandarin chinese." class="bibref localref" style="target-element:bibitem"><span class="cite-number">11</span></a>]</span>.
+</p>
+<p class="p indent">Deep Speech doesn’t use specialized features like MFCCs&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.  We train directly from the spectrogram of the input audio signal.  The spectrogram is a fairly general representation of an audio signal.  The neural network is able to learn directly which information is relevant from the input, so we didn’t need to change anything about the features to move from English speech recognition to Mandarin speech recognition.
+</p><h3 id="sec-phoneme-lexicon-and-alignment" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.2</span>.&#8194;</span>Phoneme Lexicon and Alignment</h3>
+<p class="p noindent">Traditional speech recognition systems use the audio input features to predict abstract units of sound known as phonemes.  Before training begins, researchers come up with a mapping from each of the words in their vocabulary to sequences of phonemes.  This mapping is known as a lexicon.  Usually linguists build the lexicon by agreeing on the phonetic representation of a core set of words. To augment the size of the vocabulary, a statistical model or rule-based system can also be used to estimate the phonetic representation of other words&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#lame1996designing" title="L.&#160;Lame and G.&#160;Adda. 
+On designing pronunciation lexicons for large vocabulary continuous speech recognition. 
+In Spoken Language, 1996. ICSLP 96. Proceedings., Fourth International Conference on, volume&#160;1, pages 6&#8211;9. IEEE, 1996." class="bibref localref" style="target-element:bibitem"><span class="cite-number">8</span></a>]</span>.  These phonemes are then aligned in time with short 10 millisecond frames of audio in an iterative training process. When switching to a new language with a traditional speech recognition system, a whole new lexicon must be hand crafted.  In the case of Mandarin, the phonemes will contain tone information, and word segmentation may be necessary (see section 2.3)&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#shan2010search" title="J.&#160;Shan, G.&#160;Wu, Z.&#160;Hu, X.&#160;Tang, M.&#160;Jansche, and P.&#160;J. Moreno. 
+Search by voice in mandarin chinese." class="bibref localref" style="target-element:bibitem"><span class="cite-number">11</span></a>]</span>.
+</p>
+<p class="p indent">With the Deep Speech network, constructing a new lexicon in Mandarin is unnecessary. Deep Speech uses a deep recurrent neural network that directly maps variable length speech to characters using the connectionist temporal classification loss function&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#graves2006" title="A.&#160;Graves, S.&#160;Fern&#225;ndez, F.&#160;Gomez, and J.&#160;Schmidhuber. 
+Connectionist temporal classification: Labelling unsegmented sequence data with recurrent neural networks. 
+In ICML, pages 369&#8211;376. ACM, 2006." class="bibref localref" style="target-element:bibitem"><span class="cite-number">4</span></a>]</span>.  There is no explicit representation of phonemes anywhere in the model, and no alignment needs to be done.  This saves us a great deal of work and language specific adaptation that would require knowledge of Mandarin linguistics.
+</p><h3 id="sec-language-modeling" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.3</span>.&#8194;</span>Language Modeling</h3>
+<p class="p noindent">Both traditional speech recognition systems and Deep Speech use a language model.  A language model is used to estimate how probable a string of words is for a given language.  The most common language model used in speech recognition is based on n-gram counts&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#bahl1983maximum" title="L.&#160;R. Bahl, F.&#160;Jelinek, and R.&#160;L. Mercer. 
+A maximum likelihood approach to continuous speech recognition." class="bibref localref" style="target-element:bibitem"><span class="cite-number">2</span></a>]</span>. Speech recognition systems, including our Deep Speech work in English&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>, typically use a large text corpus to estimate counts of word sequences.  The writing system in Mandarin doesn’t delimit words using spaces. In order to use language models in the same way when switching to Mandarin, an extra word segmentation step would need to be included. However, the word segmentation of a string of characters is vague and not clearly defined; there is no widely accepted word segmentation standard.
+</p>
+<p class="p indent">To avoid these problems when switching to Mandarin, we used a character based N-gram model rather than a word based one.  Because there are many characters in a word, a character based N-gram model cannot capture the same long-term dependencies as a word based model of the same size. However, because Deep Speech predicts characters directly, it is learning a language model of its own.  In theory it can model the long-term dependencies of language and doesn’t necessarily need a language model. We have found that adding a character based language model is still beneficial, however the network does well without any language model at all. The use of character based model saves us the segmentation step required to move to languages that do not denote words with spaces.
+</p><h2 id="sec-conclusions" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">3</span>.&#8194;</span>Conclusions</h2><h3 id="sec-the-resulting-system-is-more-accurate-than-humans-on-this-data" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">3.1</span>.&#8194;</span>The resulting system is more accurate than humans on this data</h3>
+<p class="p noindent">Despite the lack of hand tuned features or language specific components, our best Mandarin Chinese speech system transcribes short voice-query like utterances better than a typical Mandarin Chinese speaker. To benchmark against humans we ran a test with 100 randomly selected utterances and had a committee of five humans label all of them. The human committee had an error rate of 4.0&#37; as compared to the speech system&#39;s performance of 3.7&#37;. We also compared a single human transcriber to the speech system on 250 randomly selected utterances. In this case the speech system performs much better: 5.7&#37; for the speech model compared to 9.7&#37; for the human transcriber&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.
+</p>
+<p class="p indent">Below are two examples of utterances that a human usually cannot correctly transcribe.  Once someone reads the transcription from our Deep Speech system, it typically becomes clear what the speaker is saying.
+</p>
+<div class="center align-center" style="text-align:center">
+    <p class="p noindent">
+    <audio controls>
+    <source src="resources/what_grade.wav" type="audio/wav">
+    Your browser does not support the audio element.
+    </audio>
+    </p>
+    <button type="button" class="btn" onClick="document.getElementById('answer1').innerHTML='上几年级了'">Display Deep Speech transcription</button>
+    <div id="answer1" style="font-size:20px"></div>    
+</div>
+<div class="center align-center" style="text-align:center">
+    <p class="p noindent">
+    <audio controls>
+    <source src="resources/often_mistakes.wav" type="audio/wav">
+    Your browser does not support the audio element.
+    </audio>
+    </p>
+    <button type="button" class="btn" onClick="document.getElementById('answer2').innerHTML='我经常承认错误'">Display Deep Speech transcription</button>
+    <div id="answer2" style="font-size:20px"></div>    
+</div>
+<p class="p indent">The fact that the network is better than a human on this task is important because it suggests directions for future research.  We may be nearing the limits of improvement on this particular data, but humans will still almost certainly outperform Deep Speech on a broader set of speech data with different noise characteristics.  This is especially true if humans are allowed to exploit contextual information.  This suggests that work on the robustness of speech recognition systems to changes in background noise and the integration of more contextual information will be important in the future.
+</p><h3 id="sec-what-worked-in-one-language-worked-in-the-other" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">3.2</span>.&#8194;</span>What worked in one language worked in the other</h3>
+<p class="p noindent">While working on Deep Speech 2, we explored architectures with up to 11 layers including many bidirectional recurrent layers and convolutional layers, as well as a variety of optimization and systems improvements. All of these techniques are discussed in detail in our paper&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.
+</p>
+<p class="p indent">An important pattern developed during our exploration: both the architecture and system improvements generalized across languages. Improvements in one language nearly always resulted in improvements in the other.  Examples of this trend can be seen in tables&nbsp;<a href="#table-architecture" title="Comparison of the improvements in Deep Speech with architectural improvements. The development and test sets are Baidu internal corpora. All the models in the table have about 80 million parameters each." class="localref" style="target-element:tablefigure"><span class="table-label">1</span></a> and&nbsp;<a href="#table-speedup" title="Comparison of time spent in seconds in computing the CTC loss function and gradient in one epoch for two different implementations. Speedup is the ratio of CPU CTC time to GPU CTC time." class="localref" style="target-element:tablefigure"><span class="table-label">2</span></a> taken from our paper&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
+Deep speech 2: End-to-end speech recognition in english and mandarin. 
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.  This means that even though we explored a variety of different architectures, system improvements, and optimization tricks while working on Mandarin, these improvements were to speech recognition in general, rather than ones specific to Mandarin.  Given the large differences between English and Mandarin, this suggests that these improvements would hold for other languages as well.
+</p>
+<figure id="table-architecture" class="tablefigure floating align-center float" style="text-align:center;float-env:table;float-name:Table">
+<div class="center align-center" style="text-align:center">
+<table class="textable madoko block">
+<tbody><tr><td class="tbody tr-even col cell-border-left cell-line col-odd col-first" data-row="0" data-col="1" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="0" data-col="2" style="text-align:center"></td><td class="tbody tr-even col cell-line col-odd" data-row="0" data-col="3" style="text-align:center"></td><td class="tbody tr-even col cell-border-right cell-line col-even col-last" data-row="0" data-col="4" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-odd tr-first col cell-border-left col-odd col-first" data-row="1" data-col="1" style="text-align:center"> Language </td><td class="tbody tr-odd tr-first col col-even" data-row="1" data-col="2" style="text-align:center"> Architecture   </td><td class="tbody tr-odd tr-first col col-odd" data-row="1" data-col="3" style="text-align:center"> Dev no LM </td><td class="tbody tr-odd tr-first col cell-border-right col-even col-last" data-row="1" data-col="4" style="text-align:center"> Dev LM </td></tr>
+<tr><td class="tbody tr-odd tr-first col cell-border-left cell-line col-odd col-first" data-row="1" data-col="1" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-line col-even" data-row="1" data-col="2" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-line col-odd" data-row="1" data-col="3" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-border-right cell-line col-even col-last" data-row="1" data-col="4" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-even col cell-border-left col-odd col-first" data-row="2" data-col="1" style="text-align:center"> English (WER) </td><td class="tbody tr-even col col-even" data-row="2" data-col="2" style="text-align:center"> 5-layer, 1 RNN </td><td class="tbody tr-even col col-odd" data-row="2" data-col="3" style="text-align:center"> 27.79     </td><td class="tbody tr-even col cell-border-right col-even col-last" data-row="2" data-col="4" style="text-align:center"> 14.39  </td></tr>
+<tr><td class="tbody tr-even col cell-border-left cell-line col-odd col-first" data-row="2" data-col="1" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="2" data-col="2" style="text-align:center"></td><td class="tbody tr-even col cell-line col-odd" data-row="2" data-col="3" style="text-align:center"></td><td class="tbody tr-even col cell-border-right cell-line col-even col-last" data-row="2" data-col="4" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-odd col cell-border-left col-odd col-first" data-row="3" data-col="1" style="text-align:center"> English (WER)  </td><td class="tbody tr-odd col col-even" data-row="3" data-col="2" style="text-align:center"> 9-layer, 7 RNN </td><td class="tbody tr-odd col col-odd" data-row="3" data-col="3" style="text-align:center"> 14.93     </td><td class="tbody tr-odd col cell-border-right col-even col-last" data-row="3" data-col="4" style="text-align:center"> 9.52   </td></tr>
+<tr><td class="tbody tr-odd col cell-border-left cell-line col-odd col-first" data-row="3" data-col="1" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-even" data-row="3" data-col="2" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-odd" data-row="3" data-col="3" style="text-align:center"></td><td class="tbody tr-odd col cell-border-right cell-line col-even col-last" data-row="3" data-col="4" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-even col cell-border-left col-odd col-first" data-row="4" data-col="1" style="text-align:center"> Mandarin (CER)</td><td class="tbody tr-even col col-even" data-row="4" data-col="2" style="text-align:center"> 5-layer, 1 RNN </td><td class="tbody tr-even col col-odd" data-row="4" data-col="3" style="text-align:center"> 9.80      </td><td class="tbody tr-even col cell-border-right col-even col-last" data-row="4" data-col="4" style="text-align:center"> 7.13   </td></tr>
+<tr><td class="tbody tr-even col cell-border-left cell-line col-odd col-first" data-row="4" data-col="1" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="4" data-col="2" style="text-align:center"></td><td class="tbody tr-even col cell-line col-odd" data-row="4" data-col="3" style="text-align:center"></td><td class="tbody tr-even col cell-border-right cell-line col-even col-last" data-row="4" data-col="4" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-odd tr-last col cell-border-left col-odd col-first" data-row="5" data-col="1" style="text-align:center"> Mandarin (CER)</td><td class="tbody tr-odd tr-last col col-even" data-row="5" data-col="2" style="text-align:center"> 9-layer, 7 RNN </td><td class="tbody tr-odd tr-last col col-odd" data-row="5" data-col="3" style="text-align:center"> 7.55      </td><td class="tbody tr-odd tr-last col cell-border-right col-even col-last" data-row="5" data-col="4" style="text-align:center"> 5.81   </td></tr>
+<tr><td class="tbody tr-odd col cell-border-left cell-line col-odd col-first" data-row="5" data-col="1" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-even" data-row="5" data-col="2" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-odd" data-row="5" data-col="3" style="text-align:center"></td><td class="tbody tr-odd col cell-border-right cell-line col-even" data-row="5" data-col="4" style="text-align:center"></td></tr></tbody></table></div>
+<hr  class="figureline madoko" style="display:block">
+
+<div class="p noindent"><fig-caption class="figure-caption"><span class="caption-before"><strong class="strong-star2">Table&#160;<span class="table-label">1</span>.</strong> </span><span class="caption-text">Comparison of the improvements in Deep Speech with architectural improvements. The development and test sets are Baidu internal corpora. All the models in the table have about 80 million parameters each.</span></fig-caption></div></figure>
+<figure id="table-speedup" class="tablefigure floating align-center float" style="text-align:center;float-env:table;float-name:Table">
+<div class="center align-center" style="text-align:center">
+<table class="textable madoko block">
+<tbody><tr><td class="tbody tr-even col cell-border-left cell-line col-odd col-first" data-row="0" data-col="1" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="0" data-col="2" style="text-align:center"></td><td class="tbody tr-even col cell-line col-odd" data-row="0" data-col="3" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="0" data-col="4" style="text-align:center"></td><td class="tbody tr-even col cell-border-right cell-line col-odd col-last" data-row="0" data-col="5" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-odd tr-first col cell-border-left col-odd col-first" data-row="1" data-col="1" style="text-align:center"> Language </td><td class="tbody tr-odd tr-first col col-even" data-row="1" data-col="2" style="text-align:center"> Architecture   </td><td class="tbody tr-odd tr-first col col-odd" data-row="1" data-col="3" style="text-align:center"> CPU CTC Time </td><td class="tbody tr-odd tr-first col col-even" data-row="1" data-col="4" style="text-align:center"> GPU CTC Time </td><td class="tbody tr-odd tr-first col cell-border-right col-odd col-last" data-row="1" data-col="5" style="text-align:center"> Speedup</td></tr>
+<tr><td class="tbody tr-odd tr-first col cell-border-left cell-line col-odd col-first" data-row="1" data-col="1" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-line col-even" data-row="1" data-col="2" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-line col-odd" data-row="1" data-col="3" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-line col-even" data-row="1" data-col="4" style="text-align:center"></td><td class="tbody tr-odd tr-first col cell-border-right cell-line col-odd col-last" data-row="1" data-col="5" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-even col cell-border-left col-odd col-first" data-row="2" data-col="1" style="text-align:center"> English  </td><td class="tbody tr-even col col-even" data-row="2" data-col="2" style="text-align:center"> 5-layer, 3 RNN </td><td class="tbody tr-even col col-odd" data-row="2" data-col="3" style="text-align:center"> 5888.12      </td><td class="tbody tr-even col col-even" data-row="2" data-col="4" style="text-align:center"> 203.56       </td><td class="tbody tr-even col cell-border-right col-odd col-last" data-row="2" data-col="5" style="text-align:center"> 28.9   </td></tr>
+<tr><td class="tbody tr-even col cell-border-left cell-line col-odd col-first" data-row="2" data-col="1" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="2" data-col="2" style="text-align:center"></td><td class="tbody tr-even col cell-line col-odd" data-row="2" data-col="3" style="text-align:center"></td><td class="tbody tr-even col cell-line col-even" data-row="2" data-col="4" style="text-align:center"></td><td class="tbody tr-even col cell-border-right cell-line col-odd col-last" data-row="2" data-col="5" style="text-align:center"></td></tr>
+<tr><td class="tbody tr-odd tr-last col cell-border-left col-odd col-first" data-row="3" data-col="1" style="text-align:center"> Mandarin </td><td class="tbody tr-odd tr-last col col-even" data-row="3" data-col="2" style="text-align:center"> 5-layer, 3 RNN </td><td class="tbody tr-odd tr-last col col-odd" data-row="3" data-col="3" style="text-align:center"> 1688.01      </td><td class="tbody tr-odd tr-last col col-even" data-row="3" data-col="4" style="text-align:center"> 135.05       </td><td class="tbody tr-odd tr-last col cell-border-right col-odd col-last" data-row="3" data-col="5" style="text-align:center"> 12.5   </td></tr>
+<tr><td class="tbody tr-odd col cell-border-left cell-line col-odd col-first" data-row="3" data-col="1" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-even" data-row="3" data-col="2" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-odd" data-row="3" data-col="3" style="text-align:center"></td><td class="tbody tr-odd col cell-line col-even" data-row="3" data-col="4" style="text-align:center"></td><td class="tbody tr-odd col cell-border-right cell-line col-odd col-last" data-row="3" data-col="5" style="text-align:center"></td></tr></tbody></table></div>
+<hr  class="figureline madoko" style="display:block">
+
+<div class="p noindent"><fig-caption class="figure-caption"><span class="caption-before"><strong class="strong-star2">Table&#160;<span class="table-label">2</span>.</strong> </span><span class="caption-text">Comparison of time spent in seconds in computing the CTC loss function and gradient in one epoch for two different implementations. Speedup is the ratio of CPU CTC time to GPU CTC time.</span></fig-caption></div></figure><h3 id="sec-more-data-and-bigger-networks-outperform-feature-engineering-but-they-also-make-it-easier-to-change-domains" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">3.3</span>.&#8194;</span>More data and bigger networks outperform feature engineering, but they also make it easier to change domains</h3>
+<p class="p noindent">It is a well-worn adage in the deep learning community at this point that a lot of data and a machine learning technique that can exploit that data tends to work better than almost any amount of careful feature engineering&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#halevy2009unreasonable" title="A.&#160;Halevy, P.&#160;Norvig, and F.&#160;Pereira. 
+The unreasonable effectiveness of data." class="bibref localref" style="target-element:bibitem"><span class="cite-number">5</span></a>]</span>. We find the same thing here, with deeper models working increasingly well.  However, the lack of feature engineering in end-to-end deep learning has other advantages.  A big of advantage Deep Speech is that we need little domain specific knowledge to get the system to work in a new language.
+</p><h3 id="sec-the-limiting-factor-is-data" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">3.4</span>.&#8194;</span>The limiting factor is data</h3>
+<p class="p noindent">Time spent on a machine-learning problem roughly falls into the following three categories: getting data, developing algorithms, and training models.  One of the reasons deep learning has been so valuable is that it has converted researcher time spent on hand engineering features to computer time spent on training networks.  The end-to-end learning approach for speech recognition further reduces researcher time.  GPUs have added so much value because they have reduced the training time.  The systems work our team has done to speed up neural network training has further reduced that.  We can now train a model on &#160;10,000 hours of speech in around 100 hours on a single 8 GPU node.  That much data seems to be sufficient to push the state of the art on other languages.  There are currently about 13 languages with more than one hundred million speakers.  Therefore we could produce a near state-of-the-art speech recognition system for every language with greater than one hundred million users in about 60 days on a single node.
+</p>
+<p class="p indent">Collecting such data sets could be very difficult and prohibitively expensive.  However, our results suggest the existence of a universal architecture for speech recognition for all languages. If this is true, technologies like transfer learning will become an even more important research direction to recognize all the world’s languages.
+</p>
+<div class="bibl" style="bbl-file:out/deepspeech2_blog-bib.bbl.mdk"><h2 id="sec-references" class="clearnum h1 heading-references" data-heading-depth="1" style="display:block">References</h2>
+<div class="bibliography bib-numeric" data-hanging-indent="0" data-style="abbrv" style="bibstyle:madoko-numeric">
+<div id="amodei2015deep" class="bibitem" data-cite-label="1" style="bibitem-label:[1];text-indent:-2rem;margin-left:2rem;searchterm:+Amodei+Anubhai+Battenberg+Case+Casper+Catanzaro+Chen+Chrzanowski+Coates+Diamos+Deep+speech+speech+recognition+english+mandarin+_arXiv+preprint+arXiv++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[1]</span>D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro,
+  J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al.
+<span class="newblock"></span> Deep speech 2: End-to-end speech recognition in english and mandarin.
+<span class="newblock"></span> <em class="em-low1">arXiv preprint arXiv:1512.02595</em>, 2015.&nbsp;<a href="http://www.bing.com/search?q=+Amodei+Anubhai+Battenberg+Case+Casper+Catanzaro+Chen+Chrzanowski+Coates+Diamos+Deep+speech+speech+recognition+english+mandarin+_arXiv+preprint+arXiv++" class="bibsearch">&#128270;</a></div>
+<div id="bahl1983maximum" class="bibitem" data-cite-label="2" style="bibitem-label:[2];text-indent:-2rem;margin-left:2rem;searchterm:+maximum+likelihood+approach+continuous+speech+recognition+++Bahl+Jelinek+Mercer+"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[2]</span>L.&#160;R. Bahl, F.&#160;Jelinek, and R.&#160;L. Mercer.
+<span class="newblock"></span> A maximum likelihood approach to continuous speech recognition.
+<span class="newblock"></span> <em class="em-low1">Pattern Analysis and Machine Intelligence, IEEE Transactions
+  on</em>, (2):179&#8211;190, 1983.&nbsp;<a href="http://www.bing.com/search?q=+maximum+likelihood+approach+continuous+speech+recognition+++Bahl+Jelinek+Mercer+" class="bibsearch">&#128270;</a></div>
+<div id="davis1980comparison" class="bibitem" data-cite-label="3" style="bibitem-label:[3];text-indent:-2rem;margin-left:2rem;searchterm:+Davis+Mermelstein+Comparison+parametric+representations+monosyllabic+word+recognition+continuously+spoken+sentences+_Acoustics+Speech+Signal+Processing+IEEE+Transactions++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[3]</span>S.&#160;B. Davis and P.&#160;Mermelstein.
+<span class="newblock"></span> Comparison of parametric representations for monosyllabic word
+  recognition in continuously spoken sentences.
+<span class="newblock"></span> <em class="em-low1">Acoustics, Speech and Signal Processing, IEEE Transactions on</em>,
+  28(4):357&#8211;366, 1980.&nbsp;<a href="http://www.bing.com/search?q=+Davis+Mermelstein+Comparison+parametric+representations+monosyllabic+word+recognition+continuously+spoken+sentences+_Acoustics+Speech+Signal+Processing+IEEE+Transactions++" class="bibsearch">&#128270;</a></div>
+<div id="graves2006" class="bibitem" data-cite-label="4" style="bibitem-label:[4];text-indent:-2rem;margin-left:2rem;searchterm:+Graves+Fern+ndez+Gomez+Schmidhuber+Connectionist+temporal+classification+Labelling+unsegmented+sequence+data+with+recurrent+neural+networks+_ICML_+pages++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[4]</span>A.&#160;Graves, S.&#160;Fern&#225;ndez, F.&#160;Gomez, and J.&#160;Schmidhuber.
+<span class="newblock"></span> Connectionist temporal classification: Labelling unsegmented sequence
+  data with recurrent neural networks.
+<span class="newblock"></span> In <em class="em-low1">ICML</em>, pages 369&#8211;376. ACM, 2006.&nbsp;<a href="http://www.bing.com/search?q=+Graves+Fern+ndez+Gomez+Schmidhuber+Connectionist+temporal+classification+Labelling+unsegmented+sequence+data+with+recurrent+neural+networks+_ICML_+pages++" class="bibsearch">&#128270;</a></div>
+<div id="halevy2009unreasonable" class="bibitem" data-cite-label="5" style="bibitem-label:[5];text-indent:-2rem;margin-left:2rem;searchterm:+unreasonable+effectiveness+data+++Halevy+Norvig+Pereira+"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[5]</span>A.&#160;Halevy, P.&#160;Norvig, and F.&#160;Pereira.
+<span class="newblock"></span> The unreasonable effectiveness of data.
+<span class="newblock"></span> <em class="em-low1">Intelligent Systems, IEEE</em>, 24(2):8&#8211;12, 2009.&nbsp;<a href="http://www.bing.com/search?q=+unreasonable+effectiveness+data+++Halevy+Norvig+Pereira+" class="bibsearch">&#128270;</a></div>
+<div id="hannun2014deepspeech" class="bibitem" data-cite-label="6" style="bibitem-label:[6];text-indent:-2rem;margin-left:2rem;searchterm:+Hannun+Case+Casper+Catanzaro+Diamos+Elsen+Prenger+Satheesh+Sengupta+Coates+Deepspeech+Scaling+speech+recognition+_arXiv+preprint+arXiv++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[6]</span>A.&#160;Hannun, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, G.&#160;Diamos, E.&#160;Elsen, R.&#160;Prenger,
+  S.&#160;Satheesh, S.&#160;Sengupta, A.&#160;Coates, et&#160;al.
+<span class="newblock"></span> Deepspeech: Scaling up end-to-end speech recognition.
+<span class="newblock"></span> <em class="em-low1">arXiv preprint arXiv:1412.5567</em>, 2014.&nbsp;<a href="http://www.bing.com/search?q=+Hannun+Case+Casper+Catanzaro+Diamos+Elsen+Prenger+Satheesh+Sengupta+Coates+Deepspeech+Scaling+speech+recognition+_arXiv+preprint+arXiv++" class="bibsearch">&#128270;</a></div>
+<div id="jackson2001lessons" class="bibitem" data-cite-label="7" style="bibitem-label:[7];text-indent:-2rem;margin-left:2rem;searchterm:+Jackson+Kaplan+Lessons+learned+from+fifty+years+theory+practice+government+language+teaching+_GEORGETOWN+UNIVERSITY+ROUND+TABLE+LANGUAGES+LINGUISTICS+page++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[7]</span>F.&#160;H. Jackson and M.&#160;A. Kaplan.
+<span class="newblock"></span> Lessons learned from fifty years of theory and practice in government
+  language teaching.
+<span class="newblock"></span> <em class="em-low1">GEORGETOWN UNIVERSITY ROUND TABLE ON LANGUAGES AND LINGUISTICS
+  1999</em>, page&#160;71, 2001.&nbsp;<a href="http://www.bing.com/search?q=+Jackson+Kaplan+Lessons+learned+from+fifty+years+theory+practice+government+language+teaching+_GEORGETOWN+UNIVERSITY+ROUND+TABLE+LANGUAGES+LINGUISTICS+page++" class="bibsearch">&#128270;</a></div>
+<div id="lame1996designing" class="bibitem" data-cite-label="8" style="bibitem-label:[8];text-indent:-2rem;margin-left:2rem;searchterm:+Lame+Adda+designing+pronunciation+lexicons+large+vocabulary+continuous+speech+recognition+_Spoken+Language+ICSLP+Proceedings+Fourth+International+Conference+volume+pages+IEEE++"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[8]</span>L.&#160;Lame and G.&#160;Adda.
+<span class="newblock"></span> On designing pronunciation lexicons for large vocabulary continuous
+  speech recognition.
+<span class="newblock"></span> In <em class="em-low1">Spoken Language, 1996. ICSLP 96. Proceedings., Fourth
+  International Conference on</em>, volume&#160;1, pages 6&#8211;9. IEEE, 1996.&nbsp;<a href="http://www.bing.com/search?q=+Lame+Adda+designing+pronunciation+lexicons+large+vocabulary+continuous+speech+recognition+_Spoken+Language+ICSLP+Proceedings+Fourth+International+Conference+volume+pages+IEEE++" class="bibsearch">&#128270;</a></div>
+<div id="lamel2011improved" class="bibitem" data-cite-label="9" style="bibitem-label:[9];text-indent:-2rem;margin-left:2rem;searchterm:Improved+models+mandarin+speech+text+transcription+++Lamel+-+Gauvain+Oparin+Meng+"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[9]</span>L.&#160;Lamel, J.-L. Gauvain, V.&#160;B. Le, I.&#160;Oparin, and S.&#160;Meng.
+<span class="newblock"></span> Improved models for mandarin speech-to-text transcription.
+<span class="newblock"></span> In <em class="em-low1">Acoustics, Speech and Signal Processing (ICASSP), 2011 IEEE
+  International Conference on</em>, pages 4660&#8211;4663. IEEE, 2011.&nbsp;<a href="http://www.bing.com/search?q=Improved+models+mandarin+speech+text+transcription+++Lamel+-+Gauvain+Oparin+Meng+" class="bibsearch">&#128270;</a></div>
+<div id="norman1988chinese" class="bibitem" data-cite-label="10" style="bibitem-label:[10];text-indent:-2rem;margin-left:2rem;searchterm:_Chinese_+++Norman+"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[10]</span>J.&#160;Norman.
+<span class="newblock"></span> <em class="em-low1">Chinese</em>.
+<span class="newblock"></span> Cambridge University Press, 1988.&nbsp;<a href="http://www.bing.com/search?q=_Chinese_+++Norman+" class="bibsearch">&#128270;</a></div>
+<div id="shan2010search" class="bibitem" data-cite-label="11" style="bibitem-label:[11];text-indent:-2rem;margin-left:2rem;searchterm:Search+voice+mandarin+chinese+++Shan+Tang+Jansche+Moreno+"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[11]</span>J.&#160;Shan, G.&#160;Wu, Z.&#160;Hu, X.&#160;Tang, M.&#160;Jansche, and P.&#160;J. Moreno.
+<span class="newblock"></span> Search by voice in mandarin chinese.
+<span class="newblock"></span> In <em class="em-low1">INTERSPEECH</em>, pages 354&#8211;357, 2010.&nbsp;<a href="http://www.bing.com/search?q=Search+voice+mandarin+chinese+++Shan+Tang+Jansche+Moreno+" class="bibsearch">&#128270;</a></div></div></div>
+<div class="logomadoko" style="display:block;text-align:right;font-size:xx-small;margin-top:4em">Created with&nbsp;<a href="https://www.madoko.net">Madoko.net</a>.</div><span data-line=""></span></div>
+</body>
+</html>
