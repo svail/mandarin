@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -15,7 +16,7 @@
   <meta name="generator" content="Madoko, version 1.0.0-rc2" />
   <meta name="viewport" content="initial-scale=1.0" />
   <meta name="author" content="Tony Han" />
-  <title>Around the World in 60 Days:  Getting Deep Speech to Work on Mandarin</title>
+  <title>Around the World in 60 Days:  Getting Deep Speech to Work in Mandarin</title>
   <style type="text/css"  class="link">
   /*# sourceURL=madoko.css */
   .btn {
@@ -317,8 +318,8 @@
 
 <div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
 <div class="titleheader align-center" style="text-align:center;line-adjust:0">
-<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Around the World in 60 Days:  Getting Deep Speech to Work on Mandarin</div>
-<div class="titlenote para-block" style="line-adjust:0">January 2016</div></div>
+<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Around the World in 60 Days:  Getting Deep Speech to Work in Mandarin</div>
+<div class="titlenote para-block" style="line-adjust:0">February 2016</div></div>
 <div class="authors align-center" style="text-align:center;width:80%;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
 <tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
 <div class="authorname" style="font-size:large;line-adjust:0">Ryan J. Prenger</div>
@@ -327,7 +328,7 @@
 <div class="authorname" style="font-size:large;line-adjust:0">Tony Han</div>
 <div class="authoraddress" style="line-adjust:0">Baidu</div>
 <div class="authoremail email" style="line-adjust:0">tonyhan@baidu.com</div></td></tr></tbody></table></div></div><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2>
-<p class="p noindent">At SVAIL, our mission is to create AI technology that lets us have a significant impact on hundreds of millions of people. When we did the original Deep Speech work&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#hannun2014deepspeech" title="A.&#160;Hannun, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, G.&#160;Diamos, E.&#160;Elsen, R.&#160;Prenger, S.&#160;Satheesh, S.&#160;Sengupta, A.&#160;Coates, et&#160;al. 
+<p class="p noindent">At SVAIL (Silicon Valley AI Lab), our mission is to create AI technology that lets us have a significant impact on hundreds of millions of people. When we did the original Deep Speech work&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#hannun2014deepspeech" title="A.&#160;Hannun, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, G.&#160;Diamos, E.&#160;Elsen, R.&#160;Prenger, S.&#160;Satheesh, S.&#160;Sengupta, A.&#160;Coates, et&#160;al. 
 Deepspeech: Scaling up end-to-end speech recognition. 
 arXiv preprint arXiv:1412.5567, 2014." class="bibref localref" style="target-element:bibitem"><span class="cite-number">6</span></a>]</span> in English, it became clear that the shortest path to achieving our mission would be to get the system working in Mandarin Chinese.  In our recent paper&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
 Deep speech 2: End-to-end speech recognition in english and mandarin. 
@@ -407,7 +408,7 @@ arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-el
 </p>
 <p class="p indent">An important pattern developed during our exploration: both the architecture and system improvements generalized across languages. Improvements in one language nearly always resulted in improvements in the other.  Examples of this trend can be seen in tables&nbsp;<a href="#table-architecture" title="Comparison of the improvements in Deep Speech with architectural improvements. The development and test sets are Baidu internal corpora. All the models in the table have about 80 million parameters each." class="localref" style="target-element:tablefigure"><span class="table-label">1</span></a> and&nbsp;<a href="#table-speedup" title="Comparison of time spent in seconds in computing the CTC loss function and gradient in one epoch for two different implementations. Speedup is the ratio of CPU CTC time to GPU CTC time." class="localref" style="target-element:tablefigure"><span class="table-label">2</span></a> taken from our paper&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#amodei2015deep" title="D.&#160;Amodei, R.&#160;Anubhai, E.&#160;Battenberg, C.&#160;Case, J.&#160;Casper, B.&#160;Catanzaro, J.&#160;Chen, M.&#160;Chrzanowski, A.&#160;Coates, G.&#160;Diamos, et&#160;al. 
 Deep speech 2: End-to-end speech recognition in english and mandarin. 
-arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.  This means that even though we explored a variety of different architectures, system improvements, and optimization tricks while working on Mandarin, these improvements were to speech recognition in general, rather than ones specific to Mandarin.  Given the large differences between English and Mandarin, this suggests that these improvements would hold for other languages as well.
+arXiv preprint arXiv:1512.02595, 2015." class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>.  This means that even though we explored a variety of different architectures, system improvements, and optimization tricks while working in Mandarin, these improvements were to speech recognition in general, rather than ones specific to Mandarin.  Given the large differences between English and Mandarin, this suggests that these improvements would hold for other languages as well.
 </p>
 <figure id="table-architecture" class="tablefigure floating align-center float" style="text-align:center;float-env:table;float-name:Table">
 <div class="center align-center" style="text-align:center">
